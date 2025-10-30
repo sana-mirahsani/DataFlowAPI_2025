@@ -4,7 +4,7 @@ project_name/
 │
 ├── data/                     
 ├── notebooks/
-│   └── exploration.ipynb     # your analysis notebook
+│   └── main_script.ipynb     # analysis notebook
 │
 ├── src/
 │   ├── data_utils.py         # data preparation functions
@@ -15,8 +15,6 @@ project_name/
 │   ├── test_data_utils.py
 │   └── test_api.py
 │
-├── README.md                 # how to run, inputs/outputs, etc.
-├── train.py                  # command to train model
-└── requirements.txt          # dependencies
+└── README.md                 # how to run, inputs/outputs, etc.
 
 ```

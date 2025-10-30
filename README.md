@@ -53,3 +53,22 @@ To launch the API
 
 To start the web interface (UI)
 → e.g. streamlit run app_ui.py
+
+project_name/
+│
+├── data/                     # your datasets
+├── notebooks/
+│   └── exploration.ipynb     # your analysis notebook
+│
+├── src/
+│   ├── data_utils.py         # data preparation functions
+│   ├── model_utils.py        # model training/prediction
+│   └── api.py                # Flask or FastAPI endpoints
+│
+├── tests/
+│   ├── test_data_utils.py
+│   └── test_api.py
+│
+├── README.md                 # how to run, inputs/outputs, etc.
+├── train.py                  # command to train model
+└── requirements.txt          # dependencies

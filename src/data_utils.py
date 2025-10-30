@@ -25,7 +25,7 @@ def load_data(file_path: str) -> pd.DataFrame:
     Returns: pd.DataFrame
         A dataframe of csv file.
     """
-    return pd.read_csv(file_path)
+    return pd.read_csv(file_path, sep=";")
 
 def save_data(df: pd.DataFrame, file_path: str):
     """Sava dataframe into a CSV file.
@@ -75,8 +75,8 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
         file_path : pd.DataFrame
             A raw dataframe.
     
-    Returns: pd.DataFrame
-        A cleaned dataframe.
+    Returns: 
+        pd.DataFrame : A cleaned dataframe.
     """
     # Check duplicates before removing any
     dup_count = df.duplicated().sum()
@@ -132,23 +132,6 @@ def drop_columns(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
         A dataframe without some columns.
     """
     return df.drop(columns=columns, errors='ignore')
-
-# =============================================================================
-# 6. Encoding categorical variables
-# =============================================================================
-def encode_categorical(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
-    """Convert categorical columns to numeric using one-hot encoding.
-
-    Args:
-        df : pd.DataFrame
-            A dataframe.
-        columns : list[str]
-            Categorical columns.
-    
-    Returns: pd.DataFrame
-        A dataframe with numeric columns.
-    """
-    return pd.get_dummies(df, columns=columns, drop_first=True)
 
 # =============================================================================
 # 6. Encoding categorical variables

@@ -160,7 +160,7 @@ def convert_by_TF_IDF(df: pd.DataFrame) -> tuple:
     y = df["Target"]
 
     # save vocabulary
-    save_vocab(vectorizer, "TF_IDF_vocab")
+    save_vocab(vectorizer, "lr_vocab")
     
     return X, y
 

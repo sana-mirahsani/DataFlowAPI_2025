@@ -12,7 +12,7 @@ import re
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
-
+from model_utils import save_vocab
 # =============================================================================
 # 1. Save /Load data
 # =============================================================================
@@ -154,9 +154,13 @@ def convert_by_TF_IDF(df: pd.DataFrame) -> tuple:
     Returns: X, y
         Data as numerical vectors and target column.
     """
+    # create vocabulary
     vectorizer = TfidfVectorizer(max_features=5000, ngram_range=(1,2))
     X = vectorizer.fit_transform(df["text"])
     y = df["Target"]
+
+    # save vocabulary
+    save_vocab(vectorizer, "TF_IDF_vocab")
     
     return X, y
 

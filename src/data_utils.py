@@ -8,8 +8,10 @@
 # =============================================================================
 import numpy as np
 import pandas as pd
+import re
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 # =============================================================================
 # 1. Save /Load data
@@ -99,68 +101,76 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 # =============================================================================
-# 4. Rescale data
+# 4. create text column
 # =============================================================================
-def rescale_data(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
+def create_text_column(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
     """
-    Standardize numerical columns using StandardScaler.
+    Create a column text by combining 
+    content and title review column.
 
     Args:
-        file_path : pd.DataFrame
+        df : pd.DataFrame
             A cleaned dataframe.
+        columns :
+            title and content review columns.
     
     Returns: pd.DataFrame
-        A normalized dataframe.
+        A new dataframe with text column.
     """
-    scaler = StandardScaler()
-    df[columns] = scaler.fit_transform(df[columns])
+    df["text"] = df[columns[0]].fillna('').astype(str) + " " + df[columns[1]].fillna('').astype(str)
+
     return df
 
 # =============================================================================
-# 5. Drop some columns
+# 5. clean text
 # =============================================================================
-def drop_columns(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
-    """Drop unnecessary columns from the DataFrame.
+def clean_text(text:str) -> str:
+    """Clean the content of data.
     
+    Args:
+        text : str
+            A row of data frame, only the text column.
+    
+    Returns: str
+        A cleaned text.
+    """
+
+    text = text.lower()                            # lowercase everything
+    text = re.sub(r"http\S+", "", text)             # remove URLs
+    text = re.sub(r"[^a-zA-ZÀ-ÿ\s]", " ", text)     # keep only letters (with accents)
+    text = re.sub(r"\s+", " ", text).strip()        # remove extra spaces
+    return text
+
+# =============================================================================
+# 6. Convert to numerical vectors by TF-IDF
+# =============================================================================
+def convert_by_TF_IDF(df: pd.DataFrame) -> tuple:
+    """Convert text to numerical vectors by TF-IDF.
+
     Args:
         df : pd.DataFrame
             A dataframe.
-        columns : list[str]
-            columns to remove.
     
-    Returns: pd.DataFrame
-        A dataframe without some columns.
+    Returns: X, y
+        Data as numerical vectors and target column.
     """
-    return df.drop(columns=columns, errors='ignore')
-
-# =============================================================================
-# 6. Encoding categorical variables
-# =============================================================================
-def encode_categorical(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
-    """Convert categorical columns to numeric using one-hot encoding.
-
-    Args:
-        df : pd.DataFrame
-            A dataframe.
-        columns : list[str]
-            Categorical columns.
+    vectorizer = TfidfVectorizer(max_features=5000, ngram_range=(1,2))
+    X = vectorizer.fit_transform(df["text"])
+    y = df["Target"]
     
-    Returns: pd.DataFrame
-        A dataframe with numeric columns.
-    """
-    return pd.get_dummies(df, columns=columns, drop_first=True)
+    return X, y
 
 # =============================================================================
 # 7. Scikit-learn train_test_split
 # =============================================================================
-def split_data(df: pd.DataFrame, target_col: str, test_size=0.2, random_state=42):
+def split_data(X, y, test_size=0.2, random_state=42):
     """First split data to X and y
         Second, split X and y to train_test sets.
 
     Args:
-        df : pd.DataFrame
-            A dataframe.
-        target_col: str
+        X : Sparse matrix of 
+            numerical vectors.
+        y: pd.pandas
             Target column.
         test_size : float
             Test size as a float number.
@@ -171,6 +181,4 @@ def split_data(df: pd.DataFrame, target_col: str, test_size=0.2, random_state=42
         X_train, y_train, X_test, y_test.
     """
 
-    X = df.drop(columns=[target_col])
-    y = df[target_col]
     return train_test_split(X, y, test_size=test_size, random_state=random_state)

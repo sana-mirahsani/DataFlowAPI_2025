@@ -2,14 +2,20 @@
 ```
 project_name/
 │
-├── data/                     
+├── api/                      # Flask or FastAPI endpoints
+│   └── main.py
+│
+├── data/   
+│
+├── models/      # Stored model           
+│
 ├── notebooks/
-│   └── main_script.ipynb     # analysis notebook
+│   └── training_nb.ipynb     # analysis notebook
 │
 ├── src/
 │   ├── data_utils.py         # data preparation functions
-│   ├── model_utils.py        # model training/prediction
-│   └── api.py                # Flask or FastAPI endpoints
+│   └── model_utils.py        # model training/prediction
+│                   
 │
 ├── tests/
 │   ├── test_data_utils.py

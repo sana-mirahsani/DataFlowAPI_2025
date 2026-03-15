@@ -13,8 +13,8 @@ from pydantic import BaseModel
 # =============================================================================
 # 1. Model and vocabulary path
 # =============================================================================
-model = joblib.load("models/logistic_regression.pkl")
-vectorizer = joblib.load("models/lr_vocab.pkl")
+model = joblib.load("../models/logistic_regression.pkl")
+vectorizer = joblib.load("../models/lr_vocab.pkl")
 
 app = FastAPI()
 

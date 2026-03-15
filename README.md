@@ -51,6 +51,8 @@ project_name/
 ├── data/   # Training data
 │   └── train.csv
 │
+├── images/   # demo screenshot
+│
 ├── models/      # Stored model and vocabulary         
 │   ├── logistic_regression.pkl  # model
 │   └── lr_vocab.pkl             # vocab
